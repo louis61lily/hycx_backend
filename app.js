@@ -3,28 +3,19 @@ require("dotenv").config();
 const bodyParser = require("body-parser");
 const cors = require("cors"); // 引入cors包
 const app = express();
-const { testDatabaseConnection, insertUser } = require("./db");
+const { testDatabaseConnection, insertUser } = require("./database/db"); // 数据库连接
+const userRouter = require("./routes/user/user"); // 引入用户路由
+const emailRouter = require("./routes/email/email"); // 引入邮箱路由
 
 // 调用测试函数
 testDatabaseConnection();
-insertUser("123@123.com");
 
 app.use(cors()); // 使用cors中间件
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-  res.send("Welcome to the path planning backend!");
-});
-
-app.post("/login", (req, res) => {
-  const { username, password } = req.body;
-  if (username === "admin" && password === "password") {
-    res.status(200).json({ message: "Login successful" });
-  } else {
-    res.status(401).json({ message: "Invalid username or password" });
-  }
-});
+app.post("/login", userRouter);
+app.post("/verify", emailRouter);
 
 // 错误处理中间件
 app.use((err, req, res, next) => {

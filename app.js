@@ -3,12 +3,8 @@ require("dotenv").config();
 const bodyParser = require("body-parser");
 const cors = require("cors"); // 引入cors包
 const app = express();
-const { testDatabaseConnection, insertUser } = require("./database/db"); // 数据库连接
 const userRouter = require("./routes/user/user"); // 引入用户路由
 const emailRouter = require("./routes/email/email"); // 引入邮箱路由
-
-// 调用测试函数
-testDatabaseConnection();
 
 app.use(cors()); // 使用cors中间件
 app.use(bodyParser.json());

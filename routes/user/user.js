@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const { verificationCodes } = require("../../functions/email");
+const { insertUser } = require("../../database/db");
 
-// 验证验证码路径
-router.post("/login", (req, res) => {
+// 登录并验证验证码路径
+router.post("/login", async (req, res) => {
   const { email, code } = req.body;
   const currentTime = Date.now();
   const verificationData = verificationCodes[email];
@@ -14,7 +15,10 @@ router.post("/login", (req, res) => {
     const isCodeExpired = currentTime - timestamp > 1 * 60 * 1000; // 10分钟
 
     if (isCodeValid && !isCodeExpired) {
-      res.status(200).json({ code: 1, message: "Verification successful" });
+      const { userId, token } = await insertUser(email, 0);
+      res
+        .status(200)
+        .json({ code: 1, message: "Verification successful", userId, token });
     } else if (isCodeExpired) {
       res.status(400).json({ code: 0, message: "Verification code expired" });
     } else {

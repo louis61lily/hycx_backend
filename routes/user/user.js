@@ -12,7 +12,7 @@ router.post("/login", async (req, res) => {
   if (verificationData) {
     const { code: storedCode, timestamp } = verificationData;
     const isCodeValid = storedCode === parseInt(code, 10);
-    const isCodeExpired = currentTime - timestamp > 1 * 60 * 1000; // 10分钟
+    const isCodeExpired = currentTime - timestamp > 1 * 60 * 1000; // 1分钟
 
     if (isCodeValid && !isCodeExpired) {
       const { userId, token } = await insertUser(email, 0);

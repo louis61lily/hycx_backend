@@ -43,12 +43,14 @@ async function insertUser(email, type = 0) {
     }
     connection.release();
 
+    // TODO: 添加token的过期时间并测试
+
     // 生成 JWT
     const token = jwt.sign(
       { id: userId, email: email },
       process.env.JWT_SECRET,
       {
-        expiresIn: "3d" // 时效3天
+        expiresIn: "3d" // 效3天
       }
     );
 

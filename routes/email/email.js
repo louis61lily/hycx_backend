@@ -9,7 +9,7 @@ router.post("/verify", async (req, res) => {
     const response = await sendEmail({ mail: mail });
     res.status(200).json(response);
   } catch (error) {
-    res.status(500).json({ message: "Error sending email" });
+    res.status(500).json({ message: "发送验证码发生错误" });
   }
 });
 

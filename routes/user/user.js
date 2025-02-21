@@ -16,16 +16,14 @@ router.post("/login", async (req, res) => {
 
     if (isCodeValid && !isCodeExpired) {
       const { userId, token } = await insertUser(email, 0);
-      res
-        .status(200)
-        .json({ code: 1, message: "Verification successful", userId, token });
+      res.status(200).json({ code: 1, message: "验证成功", userId, token });
     } else if (isCodeExpired) {
-      res.status(400).json({ code: 0, message: "Verification code expired" });
+      res.status(400).json({ code: 0, message: "验证码失效" });
     } else {
-      res.status(400).json({ code: 0, message: "Invalid verification code" });
+      res.status(400).json({ code: 0, message: "无效的验证码" });
     }
   } else {
-    res.status(400).json({ code: 0, message: "Invalid verification code" });
+    res.status(400).json({ code: 0, message: "无效的验证码" });
   }
 });
 

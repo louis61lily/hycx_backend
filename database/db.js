@@ -46,7 +46,10 @@ async function insertUser(email, type = 0) {
     // 生成 JWT
     const token = jwt.sign(
       { id: userId, email: email },
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "3d" // 时效3天
+      }
     );
 
     return { userId, token };

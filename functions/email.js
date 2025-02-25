@@ -28,7 +28,7 @@ const main = async (event, context) => {
     from: "2809873625@qq.com", // 发送方邮箱
     to: mail, // 接收方邮箱
     subject: "验证码", // 邮件主题
-    text: "您的验证码是：" + code + "，此验证码1分钟内有效。" // 邮件正文（纯文本）
+    text: "【慧引出行】 您的验证码是：" + code + "，此验证码3分钟内有效。" // 邮件正文（纯文本）
     // html: '<b>您的验证码是：' + code + '</b>' // 邮件正文（HTML 格式）
   };
 
@@ -44,7 +44,7 @@ const main = async (event, context) => {
       code: 1,
       data: {
         mail,
-        code
+        code: "******"
       },
       msg: "发送成功"
     };

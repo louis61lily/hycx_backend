@@ -8,6 +8,7 @@ const emailRouter = require("./routes/email/email"); // 引入邮箱路由
 const testRouter = require("./routes/test/test"); // 引入测试路由
 const routeRouter = require("./routes/route/route"); // 引入路线路由
 const experienceRoutes = require("./routes/experience/experience"); // 引入experience路由
+const sparkApiRouter = require("./routes/ai/ai");
 
 const authenticateToken = require("./middleware/auth"); // 引入验证token的中间件
 
@@ -19,6 +20,7 @@ app.post("/login", userRouter);
 app.post("/verify", emailRouter);
 app.post("/getRoute", routeRouter);
 app.use("/experience", experienceRoutes);
+app.use("/ai", sparkApiRouter);
 app.post("/test", authenticateToken, testRouter);
 
 // 错误处理中间件

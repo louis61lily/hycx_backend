@@ -7,6 +7,7 @@ const main = async (event, context) => {
 
   // 创建6位随机验证码
   const code = Math.floor(Math.random() * 900000) + 100000;
+  console.log("本次验证码是：", code);
 
   // 将验证码和生成时间存储在内存中
   verificationCodes[mail] = {

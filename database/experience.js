@@ -4,7 +4,7 @@ const { pool } = require("./db");
 async function getAllExperiences() {
   try {
     const [rows] = await pool.execute(
-      "SELECT id, departure, destination, publisher, content, publish_time FROM route_experience"
+      "SELECT id, departure, destination, publisher, content, publish_time, summary FROM route_experience"
     );
     return rows;
   } catch (error) {
@@ -17,7 +17,7 @@ async function getAllExperiences() {
 async function getExperienceById(id) {
   try {
     const [rows] = await pool.execute(
-      "SELECT id, departure, destination, publisher, content, publish_time FROM route_experience WHERE id = ?",
+      "SELECT id, departure, destination, publisher, content, publish_time, summary  FROM route_experience WHERE id = ?",
       [id]
     );
     return rows[0];
@@ -32,7 +32,7 @@ async function insertExperience(departure, destination, publisher, content) {
   try {
     const timeNow = new Date();
     const [result] = await pool.execute(
-      "INSERT INTO route_experience (departure, destination, publisher, content, publish_time) VALUES (?, ?, ?, ?, ?)",
+      "INSERT INTO route_experience (departure, destination, publisher, content, publish_time, summary ) VALUES (?, ?, ?, ?, ?)",
       [departure, destination, publisher, content, timeNow]
     );
     return result.insertId;
@@ -53,8 +53,8 @@ async function updateExperience(
   try {
     const timeNow = new Date();
     const [result] = await pool.execute(
-      "UPDATE route_experience SET departure = ?, destination = ?, publisher = ?, content = ?, publish_time = ? WHERE id = ?",
-      [departure, destination, publisher, content, timeNow, id]
+      "UPDATE route_experience SET departure = ?, destination = ?, publisher = ?, content = ?, publish_time = ? WHERE id = ?, summary =?",
+      [departure, destination, publisher, content, timeNow, id, summary]
     );
     return result.affectedRows > 0;
   } catch (error) {

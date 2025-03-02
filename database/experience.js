@@ -28,12 +28,18 @@ async function getExperienceById(id) {
 }
 
 // 插入新的 experience 数据
-async function insertExperience(departure, destination, publisher, content) {
+async function insertExperience(
+  departure,
+  destination,
+  publisher,
+  content,
+  summary
+) {
   try {
-    const timeNow = new Date();
+    const timeNow = new Date().getTime();
     const [result] = await pool.execute(
-      "INSERT INTO route_experience (departure, destination, publisher, content, publish_time, summary ) VALUES (?, ?, ?, ?, ?)",
-      [departure, destination, publisher, content, timeNow]
+      "INSERT INTO route_experience (departure, destination, publisher, content, summary, publish_time) VALUES (?, ?, ?, ?, ?, ?)",
+      [departure, destination, publisher, content, summary, timeNow]
     );
     return result.insertId;
   } catch (error) {
@@ -48,13 +54,14 @@ async function updateExperience(
   departure,
   destination,
   publisher,
-  content
+  content,
+  summary
 ) {
   try {
-    const timeNow = new Date();
+    const timeNow = new Date().getTime();
     const [result] = await pool.execute(
-      "UPDATE route_experience SET departure = ?, destination = ?, publisher = ?, content = ?, publish_time = ? WHERE id = ?, summary =?",
-      [departure, destination, publisher, content, timeNow, id, summary]
+      "UPDATE route_experience SET departure = ?, destination = ?, publisher = ?, content = ?, publish_time = ?, summary =? WHERE id = ?",
+      [departure, destination, publisher, content, timeNow, summary, id]
     );
     return result.affectedRows > 0;
   } catch (error) {

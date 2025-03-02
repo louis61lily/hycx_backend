@@ -8,7 +8,7 @@ router.get("/", async (req, res) => {
     const experiences = await experienceDB.getAllExperiences();
     res.json(experiences);
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ message: "操作失败！" });
   }
 });
 
@@ -20,26 +20,27 @@ router.get("/:id", async (req, res) => {
     if (experience) {
       res.json(experience);
     } else {
-      res.status(404).json({ error: "Experience not found" });
+      res.status(404).json({ message: "操作失败！" });
     }
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ message: "操作失败！" });
   }
 });
 
 // 插入新的 experience 数据
 router.post("/", async (req, res) => {
   try {
-    const { departure, destination, publisher, content } = req.body;
+    const { departure, destination, publisher, content, summary } = req.body;
     const id = await experienceDB.insertExperience(
       departure,
       destination,
       publisher,
-      content
+      content,
+      summary
     );
-    res.status(201).json({ id });
+    res.status(201).json({ id, message: "操作成功！" });
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ message: "操作失败！" });
   }
 });
 
@@ -47,36 +48,37 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const { departure, destination, publisher, content } = req.body;
+    const { departure, destination, publisher, content, summary } = req.body;
     const success = await experienceDB.updateExperience(
       id,
       departure,
       destination,
       publisher,
-      content
+      content,
+      summary
     );
     if (success) {
-      res.json({ message: "Experience updated successfully" });
+      res.json({ message: "操作成功" });
     } else {
-      res.status(404).json({ error: "Experience not found" });
+      res.status(404).json({ message: "操作失败！" });
     }
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ message: "操作失败！" });
   }
 });
 
 // 删除 experience 数据
-router.delete("/:id", async (req, res) => {
+router.post("/:id", async (req, res) => {
   try {
     const id = req.params.id;
     const success = await experienceDB.deleteExperience(id);
     if (success) {
-      res.json({ message: "Experience deleted successfully" });
+      res.json({ message: "操作成功！" });
     } else {
-      res.status(404).json({ error: "Experience not found" });
+      res.status(404).json({ message: "操作失败" });
     }
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ message: "操作失败" });
   }
 });
 

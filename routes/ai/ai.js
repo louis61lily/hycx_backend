@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
         messages: [
           {
             role: "user",
-            content: `请帮我生成一个从${departure}到${destination}的出行攻略，只需要包括详尽的交通信息。另外有以下要求：1.生成的内容不需要开头和结尾的无关文字 2. 如果无法生成，只需要返回“无法生成”`
+            content: `请帮我生成一个从${departure}到${destination}的出行攻略。另外有以下要求：1.生成的内容不需要开头和结尾的无关文字 2.如果无法生成，只需要返回“无法生成”`
           }
         ]
       },

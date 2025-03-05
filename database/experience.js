@@ -70,16 +70,37 @@ async function updateExperience(
   }
 }
 
-// 删除 experience 数据
-async function deleteExperience(id) {
+async function searchExperiences(keyword) {
+  const query =
+    "SELECT * FROM route_experience WHERE departure LIKE ? OR destination LIKE ?";
+  const values = [`%${keyword}%`, `%${keyword}%`];
+  const [rows] = await pool.query(query, values);
+  return rows;
+}
+async function getExperiencesByPage(page, pageSize) {
   try {
-    const [result] = await pool.execute(
-      "DELETE FROM route_experience WHERE id = ?",
-      [id]
+    // 计算偏移量
+    const offset = (page - 1) * pageSize;
+    const sql = `SELECT id, departure, destination, publisher, content, publish_time, summary FROM route_experience LIMIT ${pageSize} OFFSET ${offset}`;
+    // 查询当前页的数据
+    const [data] = await pool.execute(sql);
+    // 查询数据总数
+    const [totalRows] = await pool.execute(
+      "SELECT COUNT(*) as total FROM route_experience"
     );
-    return result.affectedRows > 0;
+    const total = totalRows[0].total;
+
+    // 计算总页数
+    const totalPage = Math.ceil(total / pageSize);
+    console.log(page, pageSize, total, totalPage, "@@@@");
+
+    return {
+      data,
+      total,
+      totalPage
+    };
   } catch (error) {
-    console.error("Error deleting experience:", error);
+    console.error("Error fetching experiences by page:", error);
     throw error;
   }
 }
@@ -89,5 +110,6 @@ module.exports = {
   getExperienceById,
   insertExperience,
   updateExperience,
-  deleteExperience
+  searchExperiences,
+  getExperiencesByPage
 };

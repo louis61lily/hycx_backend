@@ -67,18 +67,31 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// 删除 experience 数据
-router.post("/:id", async (req, res) => {
+// 根据出发地或目的地搜索 experience 数据
+router.post("/search", async (req, res) => {
   try {
-    const id = req.params.id;
-    const success = await experienceDB.deleteExperience(id);
-    if (success) {
-      res.json({ message: "操作成功！" });
-    } else {
-      res.status(404).json({ message: "操作失败" });
-    }
+    const { keyword } = req.body;
+    console.log(req.body);
+    const experiences = await experienceDB.searchExperiences(keyword);
+    res.json(experiences);
   } catch (error) {
-    res.status(500).json({ message: "操作失败" });
+    console.log(error);
+    res.status(500).json({ message: "操作失败！" });
+  }
+});
+
+// 分页获取 experience 数据
+router.post("/page", async (req, res) => {
+  try {
+    const { page, pageSize } = req.body;
+    const { data, total, totalPage } = await experienceDB.getExperiencesByPage(
+      page,
+      pageSize
+    );
+    res.json({ data, total, totalPage });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "操作失败！" });
   }
 });
 
